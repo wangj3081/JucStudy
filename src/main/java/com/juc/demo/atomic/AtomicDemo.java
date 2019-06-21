@@ -1,48 +1,33 @@
 package com.juc.demo.atomic;
 
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
+import com.juc.demo.util.EntityUtil;
+
+import java.util.concurrent.atomic.AtomicReferenceFieldUpdater;
 
 /**
- * 原子形操作
+ * 原子形属性关键字
  * @Auther: wangjian
  */
-class Count{
+class Member extends EntityUtil {
 
-    private AtomicInteger count = new AtomicInteger(0); // 原子型控制,保证数据安全操作
+    private volatile String name;
 
-    private int index = 0;
-
-    public void addOne() {
-        count.addAndGet(1);
-        this.index = index + 1;
-        try {
-            TimeUnit.MILLISECONDS.sleep(2);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+    public String getName() {
+        return name;
     }
 
-    public  int getCount() {
-        return count.get();
+    public void setName(String name) {
+        AtomicReferenceFieldUpdater fieldUpdater = AtomicReferenceFieldUpdater.newUpdater(Member.class,String.class,"name");
+        fieldUpdater.compareAndSet(this, this.name, name); // 使用该方法修改属性值，该属性必须为 volatile 关键字修饰的
     }
-
-    public int getIndex() {
-        return index;
-    }
-
 }
 public class AtomicDemo {
 
     public static void main(String[] args) throws InterruptedException {
-        Count count = new Count();
-        for (int i = 0; i < 1000; i++) {
-            new Thread(()-> {
-                count.addOne();
-            }).start();
-        }
-        TimeUnit.MILLISECONDS.sleep(1000);
-        System.out.println("count:" + count.getCount());
-        System.out.println("index:" + count.getIndex());
+        Member member = new Member();
+        member.setName("小明");
+        System.out.println(member.toString());
+        member.setName("小红");
+        System.out.println(member.toString());
     }
 }
