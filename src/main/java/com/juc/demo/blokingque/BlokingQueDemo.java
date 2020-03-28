@@ -8,7 +8,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 /**
  *  开两个线程从 1 打印到 100, 一个线程负责打印奇数、一个负责打印偶数,顺序执持
- *  通过 SynchronusQueue(同步阻塞队列)的特性配合ReentrantLock(独占锁)就可以完成此目的
+ *  通过 SynchronusQueue(同步阻塞队列,单值队列)的特性配合ReentrantLock(独占锁)就可以完成此目的
  * @Auther: wangjian
  */
 public class BlokingQueDemo {
