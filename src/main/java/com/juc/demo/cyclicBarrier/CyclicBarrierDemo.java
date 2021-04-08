@@ -17,7 +17,7 @@ public class CyclicBarrierDemo {
         CyclicBarrier cyclicBarrier = new CyclicBarrier(2, ()-> {
             System.out.println("组队完成，开始执行任务吧");
         });
-        CountDownLatch latch = new CountDownLatch(6);
+        CountDownLatch latch = new CountDownLatch(6); // 使用它的目的是控制主线程执行顺序
         for (int i = 0; i < 6; i++) {
             new Thread(()->{
                 try {
